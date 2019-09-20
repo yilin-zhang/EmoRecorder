@@ -1,0 +1,93 @@
+import sys, os, datetime
+from PyQt5.QtWidgets import QDialog, QApplication, QFileDialog
+from PyQt5.QtCore import pyqtSlot
+from app_ui import *
+
+from recorder import Recorder
+
+class RecorderApp(QDialog):
+    def __init__(self):
+        super().__init__()
+        self.ui = Ui_Dialog()
+        self.ui.setupUi(self)
+        # variables
+        self.emotion_set = (
+            'Passionate',
+            'Cheerful',
+            'Bittersweet',
+            'Quirky',
+            'Aggressive'
+        )
+        self.dataset_path = ''
+        # other settings
+        self.ui.stopButton.setEnabled(False)
+        self.timer = QtCore.QTimer()
+        self._reset_time()
+        # messages
+        self.ui.recordButton.clicked.connect(self.start_recording)
+        self.ui.stopButton.clicked.connect(self.stop_recording)
+        self.ui.browseButton.clicked.connect(self.open_file_dialog)
+        self.timer.timeout.connect(self.time_event)
+
+    def open_file_dialog(self):
+        dname = QFileDialog.getExistingDirectory(self, 'Select Directory')
+        self.dataset_path = dname
+        self.ui.dirPath.setText(dname)
+
+    def start_recording(self):
+        self.recording_file = Recorder().open(self._get_save_path())
+        self.recording_file.start_recording()
+        # update objects
+        self.ui.recordButton.setEnabled(False)
+        self.ui.stopButton.setEnabled(True)
+        self.timer.start(1000)
+
+    def stop_recording(self):
+        self.recording_file.stop_recording()
+        self.recording_file.close()
+        # clean up
+        self.ui.recordButton.setEnabled(True)
+        self.ui.stopButton.setEnabled(False)
+        self.timer.stop()
+        self._reset_time()
+
+    def time_event(self):
+        self.time = self.time.addSecs(1)
+        self.ui.timeLabel.setText(self.time.toString('mm:ss'))
+    
+    def _reset_time(self):
+        self.time = QtCore.QTime(0, 0, 0)
+        self.ui.timeLabel.setText('00:00')
+
+    def _get_emotion(self):
+        if self.ui.radioButtonEmotion1.isChecked():
+            emotion = self.emotion_set[0]
+        elif self.ui.radioButtonEmotion2.isChecked():
+            emotion = self.emotion_set[1]
+        elif self.ui.radioButtonEmotion3.isChecked():
+            emotion = self.emotion_set[2]
+        elif self.ui.radioButtonEmotion4.isChecked():
+            emotion = self.emotion_set[3]
+        elif self.ui.radioButtonEmotion5.isChecked():
+            emotion = self.emotion_set[4]
+        return emotion
+
+    def _get_instruemt(self):
+        return self.ui.instrumentBox.currentText()
+
+    def _get_save_path(self):
+        emotion = self._get_emotion()
+        instrument = self._get_instruemt()
+        dir_path = os.path.join(self.dataset_path, emotion, instrument)
+        if not os.path.exists(dir_path):
+            os.makedirs(dir_path)
+        filename = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S') + '.wav'
+        file_path = os.path.join(dir_path, filename)
+        return file_path
+        
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    w = RecorderApp()
+    w.show()
+    sys.exit(app.exec_())
