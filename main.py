@@ -19,6 +19,7 @@ class RecorderApp(QDialog):
             'Aggressive'
         )
         self.dataset_path = ''
+        self.file_path = ''
         # other settings
         self.ui.stopButton.setEnabled(False)
         self.timer = QtCore.QTimer()
@@ -35,9 +36,11 @@ class RecorderApp(QDialog):
         self.ui.dirPath.setText(dname)
 
     def start_recording(self):
-        self.recording_file = Recorder().open(self._get_save_path())
+        self.file_path = self._get_save_path()
+        self.recording_file = Recorder().open(self.file_path)
         self.recording_file.start_recording()
         # update objects
+        self.ui.promptLabel.setText('')
         self.ui.recordButton.setEnabled(False)
         self.ui.stopButton.setEnabled(True)
         self.timer.start(1000)
@@ -46,10 +49,12 @@ class RecorderApp(QDialog):
         self.recording_file.stop_recording()
         self.recording_file.close()
         # clean up
-        self.ui.recordButton.setEnabled(True)
-        self.ui.stopButton.setEnabled(False)
         self.timer.stop()
         self._reset_time()
+        self.ui.recordButton.setEnabled(True)
+        self.ui.stopButton.setEnabled(False)
+        self.ui.promptLabel.setText('Saved file to: ' + self.file_path)
+        self.file_path = ''
 
     def time_event(self):
         self.time = self.time.addSecs(1)
