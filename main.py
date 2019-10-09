@@ -23,6 +23,7 @@ class RecorderApp(QDialog):
         self.file_path = ''
         # other settings
         self.ui.stopButton.setEnabled(False)
+        self.ui.recordButton.setEnabled(False)
         self.timer = QtCore.QTimer()
         self._reset_time()
         self._set_device_box()
@@ -31,6 +32,14 @@ class RecorderApp(QDialog):
         self.ui.stopButton.clicked.connect(self.stop_recording)
         self.ui.browseButton.clicked.connect(self.open_file_dialog)
         self.timer.timeout.connect(self.timer_event)
+        self.ui.radioButtonEmotion1.clicked.connect(self.enable_record_button)
+        self.ui.radioButtonEmotion2.clicked.connect(self.enable_record_button)
+        self.ui.radioButtonEmotion3.clicked.connect(self.enable_record_button)
+        self.ui.radioButtonEmotion4.clicked.connect(self.enable_record_button)
+        self.ui.radioButtonEmotion5.clicked.connect(self.enable_record_button)
+
+    def enable_record_button(self):
+        self.ui.recordButton.setEnabled(True)
 
     def open_file_dialog(self):
         dname = QFileDialog.getExistingDirectory(self, 'Select Directory')
@@ -107,7 +116,7 @@ class RecorderApp(QDialog):
         filename = name + '-' + datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S') + '.wav'
         file_path = os.path.join(dir_path, filename)
         return file_path
-        
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
