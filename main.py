@@ -4,6 +4,7 @@ from PyQt5.QtCore import pyqtSlot
 from app_ui import *
 
 from recorder import Recorder
+from audio_device import AudioDevice
 
 class RecorderApp(QDialog):
     def __init__(self):
@@ -24,6 +25,7 @@ class RecorderApp(QDialog):
         self.ui.stopButton.setEnabled(False)
         self.timer = QtCore.QTimer()
         self._reset_time()
+        self._set_device_box()
         # messages
         self.ui.recordButton.clicked.connect(self.start_recording)
         self.ui.stopButton.clicked.connect(self.stop_recording)
@@ -37,7 +39,7 @@ class RecorderApp(QDialog):
 
     def start_recording(self):
         self.file_path = self._get_save_path()
-        self.recording_file = Recorder().open(self.file_path)
+        self.recording_file = Recorder().open(self.file_path, self._get_device_index())
         self.recording_file.start_recording()
         # update objects
         self.ui.promptLabel.setText('')
@@ -60,6 +62,19 @@ class RecorderApp(QDialog):
         self.time = self.time.addSecs(1)
         self.ui.timeLabel.setText(self.time.toString('mm:ss'))
     
+    def _set_device_box(self):
+        devices = AudioDevice().list_devices()
+        items = []
+        for device in devices:
+            index = device['index']
+            name = device['name']
+            item = str(index) + ' - ' + name
+            items.append(item)
+        self.ui.deviceBox.addItems(items)
+    
+    def _get_device_index(self):
+        return int(self.ui.deviceBox.currentText()[0])
+
     def _reset_time(self):
         self.time = QtCore.QTime(0, 0, 0)
         self.ui.timeLabel.setText('00:00')

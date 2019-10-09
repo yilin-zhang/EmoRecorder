@@ -25,13 +25,13 @@ class Recorder(object):
         self.rate = rate
         self.frames_per_buffer = frames_per_buffer
 
-    def open(self, fname, mode='wb'):
+    def open(self, fname, input_device_index=None, mode='wb'):
         return RecordingFile(fname, mode, self.channels, self.rate,
-                            self.frames_per_buffer)
+                            input_device_index, self.frames_per_buffer)
 
 class RecordingFile(object):
     def __init__(self, fname, mode, channels, 
-                rate, frames_per_buffer):
+                rate, input_device_index, frames_per_buffer):
         self.fname = fname
         self.mode = mode
         self.channels = channels
@@ -40,6 +40,7 @@ class RecordingFile(object):
         self._pa = pyaudio.PyAudio()
         self.wavefile = self._prepare_file(self.fname, self.mode)
         self._stream = None
+        self.input_device_index = input_device_index
 
     def __enter__(self):
         return self
@@ -53,6 +54,7 @@ class RecordingFile(object):
                                         channels=self.channels,
                                         rate=self.rate,
                                         input=True,
+                                        input_device_index = self.input_device_index,
                                         frames_per_buffer=self.frames_per_buffer)
         for _ in range(int(self.rate / self.frames_per_buffer * duration)):
             audio = self._stream.read(self.frames_per_buffer)
@@ -65,6 +67,7 @@ class RecordingFile(object):
                                         channels=self.channels,
                                         rate=self.rate,
                                         input=True,
+                                        input_device_index = self.input_device_index,
                                         frames_per_buffer=self.frames_per_buffer,
                                         stream_callback=self.get_callback())
         self._stream.start_stream()
