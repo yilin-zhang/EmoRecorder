@@ -38,7 +38,8 @@ class RecorderApp(QDialog):
         self.ui.dirPath.setText(dname)
 
     def start_recording(self):
-        self.file_path = self._get_save_path()
+        name = self.ui.nameEdit.text()
+        self.file_path = self._get_save_path(name)
         self.recording_file = Recorder().open(self.file_path, self._get_device_index())
         self.recording_file.start_recording()
         # update objects
@@ -97,13 +98,13 @@ class RecorderApp(QDialog):
     def _get_instruemt(self):
         return self.ui.instrumentBox.currentText()
 
-    def _get_save_path(self):
+    def _get_save_path(self, name):
         emotion = self._get_emotion()
         instrument = self._get_instruemt()
         dir_path = os.path.join(self.dataset_path, emotion, instrument)
         if not os.path.exists(dir_path):
             os.makedirs(dir_path)
-        filename = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S') + '.wav'
+        filename = name + '-' + datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S') + '.wav'
         file_path = os.path.join(dir_path, filename)
         return file_path
         
