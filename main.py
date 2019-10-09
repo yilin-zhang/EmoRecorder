@@ -1,4 +1,4 @@
-import sys, os, datetime
+import sys, os, datetime, re
 from PyQt5.QtWidgets import QDialog, QApplication, QFileDialog
 from PyQt5.QtCore import pyqtSlot
 from app_ui import *
@@ -30,7 +30,7 @@ class RecorderApp(QDialog):
         self.ui.recordButton.clicked.connect(self.start_recording)
         self.ui.stopButton.clicked.connect(self.stop_recording)
         self.ui.browseButton.clicked.connect(self.open_file_dialog)
-        self.timer.timeout.connect(self.time_event)
+        self.timer.timeout.connect(self.timer_event)
 
     def open_file_dialog(self):
         dname = QFileDialog.getExistingDirectory(self, 'Select Directory')
@@ -58,11 +58,12 @@ class RecorderApp(QDialog):
         self.ui.promptLabel.setText('Saved file to: ' + self.file_path)
         self.file_path = ''
 
-    def time_event(self):
+    def timer_event(self):
         self.time = self.time.addSecs(1)
         self.ui.timeLabel.setText(self.time.toString('mm:ss'))
     
     def _set_device_box(self):
+        # format: "idx - device name"
         devices = AudioDevice().list_devices()
         items = []
         for device in devices:
@@ -73,7 +74,8 @@ class RecorderApp(QDialog):
         self.ui.deviceBox.addItems(items)
     
     def _get_device_index(self):
-        return int(self.ui.deviceBox.currentText()[0])
+        # return the number at the beginning as the index
+        return int(re.match('\d+', self.ui.deviceBox.currentText()).group())
 
     def _reset_time(self):
         self.time = QtCore.QTime(0, 0, 0)
