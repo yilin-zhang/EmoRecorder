@@ -14,6 +14,8 @@ Non-blocking mode (start and stop recording):
 '''
 import pyaudio
 import wave
+import numpy as np
+import math
 
 class Recorder(object):
     '''A recorder class for recording audio to a WAV file.
@@ -76,10 +78,12 @@ class RecordingFile(object):
     def stop_recording(self):
         self._stream.stop_stream()
         return self
-
+    
     def get_callback(self):
         def callback(in_data, frame_count, time_info, status):
             self.wavefile.writeframes(in_data)
+            # visualization
+            self._visualize(in_data)
             return in_data, pyaudio.paContinue
         return callback
 
@@ -95,3 +99,10 @@ class RecordingFile(object):
         wavefile.setsampwidth(self._pa.get_sample_size(pyaudio.paInt16))
         wavefile.setframerate(self.rate)
         return wavefile
+
+    def _visualize(self, in_data):
+        data = np.fromstring(in_data, dtype=np.int16)
+        peak = np.average(np.abs(data)) * 2
+        num = int(50*math.log2(peak)/math.log2(2**16))
+        bars = '#' * num
+        print("%02d %s" % (num, bars))
