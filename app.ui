@@ -6,301 +6,211 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>485</width>
-    <height>583</height>
+    <width>379</width>
+    <height>722</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Emotional Music Recorder</string>
   </property>
-  <widget class="QComboBox" name="instrumentBox">
-   <property name="geometry">
-    <rect>
-     <x>190</x>
-     <y>261</y>
-     <width>104</width>
-     <height>26</height>
-    </rect>
-   </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <property name="text">
-     <string>Piano</string>
-    </property>
+    <widget class="QLabel" name="dirPath">
+     <property name="text">
+      <string>Directory of Dataset</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
    <item>
-    <property name="text">
-     <string>Violin</string>
-    </property>
+    <widget class="QPushButton" name="browseButton">
+     <property name="text">
+      <string>Browse...</string>
+     </property>
+    </widget>
    </item>
    <item>
-    <property name="text">
-     <string>Cello</string>
-    </property>
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
    </item>
    <item>
-    <property name="text">
-     <string>Trumpet</string>
-    </property>
+    <widget class="QLabel" name="deviceChoices">
+     <property name="text">
+      <string>Audio Device</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
    <item>
-    <property name="text">
-     <string>Saxophone</string>
-    </property>
+    <widget class="QComboBox" name="deviceBox"/>
    </item>
-  </widget>
-  <widget class="QRadioButton" name="radioButtonEmotion1">
-   <property name="geometry">
-    <rect>
-     <x>150</x>
-     <y>311</y>
-     <width>100</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Passionate</string>
-   </property>
-  </widget>
-  <widget class="QRadioButton" name="radioButtonEmotion2">
-   <property name="geometry">
-    <rect>
-     <x>270</x>
-     <y>311</y>
-     <width>100</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Cheerful</string>
-   </property>
-  </widget>
-  <widget class="QRadioButton" name="radioButtonEmotion3">
-   <property name="geometry">
-    <rect>
-     <x>80</x>
-     <y>371</y>
-     <width>100</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Bittersweet</string>
-   </property>
-  </widget>
-  <widget class="Line" name="line">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>80</y>
-     <width>431</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
-   </property>
-  </widget>
-  <widget class="Line" name="line_2">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>170</y>
-     <width>421</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="recordButton">
-   <property name="geometry">
-    <rect>
-     <x>180</x>
-     <y>461</y>
-     <width>113</width>
-     <height>32</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Record</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="stopButton">
-   <property name="geometry">
-    <rect>
-     <x>180</x>
-     <y>491</y>
-     <width>113</width>
-     <height>32</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Stop</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="timeLabel">
-   <property name="geometry">
-    <rect>
-     <x>220</x>
-     <y>431</y>
-     <width>51</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>00:00</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="browseButton">
-   <property name="geometry">
-    <rect>
-     <x>180</x>
-     <y>50</y>
-     <width>141</width>
-     <height>32</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Browse...</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="dirPath">
-   <property name="geometry">
-    <rect>
-     <x>60</x>
-     <y>10</y>
-     <width>361</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Select a directory for saving dataset</string>
-   </property>
-   <property name="wordWrap">
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QRadioButton" name="radioButtonEmotion4">
-   <property name="geometry">
-    <rect>
-     <x>210</x>
-     <y>371</y>
-     <width>100</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Quirky</string>
-   </property>
-  </widget>
-  <widget class="QRadioButton" name="radioButtonEmotion5">
-   <property name="geometry">
-    <rect>
-     <x>310</x>
-     <y>371</y>
-     <width>100</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Aggressive</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="promptLabel">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>530</y>
-     <width>441</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="wordWrap">
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="Line" name="line_3">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>240</y>
-     <width>431</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
-   </property>
-  </widget>
-  <widget class="QComboBox" name="deviceBox">
-   <property name="geometry">
-    <rect>
-     <x>150</x>
-     <y>140</y>
-     <width>191</width>
-     <height>26</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLabel" name="deviceChoices">
-   <property name="geometry">
-    <rect>
-     <x>60</x>
-     <y>100</y>
-     <width>361</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Select an audio device</string>
-   </property>
-   <property name="wordWrap">
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="Line" name="line_4">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>410</y>
-     <width>431</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="nameEdit">
-   <property name="geometry">
-    <rect>
-     <x>190</x>
-     <y>220</y>
-     <width>113</width>
-     <height>21</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLabel" name="deviceChoices_2">
-   <property name="geometry">
-    <rect>
-     <x>60</x>
-     <y>180</y>
-     <width>361</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Type in your name</string>
-   </property>
-   <property name="wordWrap">
-    <bool>true</bool>
-   </property>
-  </widget>
+   <item>
+    <widget class="Line" name="line_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="deviceChoices_2">
+     <property name="text">
+      <string>Musician's Name</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLineEdit" name="nameEdit"/>
+   </item>
+   <item>
+    <widget class="Line" name="line_3">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="deviceChoices_3">
+     <property name="text">
+      <string>Instrument</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QComboBox" name="instrumentBox">
+     <item>
+      <property name="text">
+       <string>Piano</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Violin</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Cello</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Trumpet</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Saxophone</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item>
+    <widget class="Line" name="line_4">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="deviceChoices_4">
+     <property name="text">
+      <string>Emotion</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QRadioButton" name="radioButtonEmotion1">
+     <property name="text">
+      <string>Passionate</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QRadioButton" name="radioButtonEmotion2">
+     <property name="text">
+      <string>Cheerful</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QRadioButton" name="radioButtonEmotion3">
+     <property name="text">
+      <string>Bittersweet</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QRadioButton" name="radioButtonEmotion4">
+     <property name="text">
+      <string>Quirky</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QRadioButton" name="radioButtonEmotion5">
+     <property name="text">
+      <string>Aggressive</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="Line" name="line_5">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="timeLabel">
+     <property name="text">
+      <string>00:00</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="recordButton">
+     <property name="text">
+      <string>Record</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="stopButton">
+     <property name="text">
+      <string>Stop</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="promptLabel">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>
