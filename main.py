@@ -21,9 +21,13 @@ class RecorderApp(QDialog):
         )
         self.dataset_path = ''
         self.file_path = ''
+        self.name_confirmed = False
+        self.emotion_selected = False
+        self.is_recording = False
         # other settings
         self.ui.stopButton.setEnabled(False)
         self.ui.recordButton.setEnabled(False)
+        self.ui.editButton.setEnabled(False)
         self.timer = QtCore.QTimer()
         self._reset_time()
         self._set_device_box()
@@ -32,14 +36,32 @@ class RecorderApp(QDialog):
         self.ui.stopButton.clicked.connect(self.stop_recording)
         self.ui.browseButton.clicked.connect(self.open_file_dialog)
         self.timer.timeout.connect(self.timer_event)
-        self.ui.radioButtonEmotion1.clicked.connect(self.enable_record_button)
-        self.ui.radioButtonEmotion2.clicked.connect(self.enable_record_button)
-        self.ui.radioButtonEmotion3.clicked.connect(self.enable_record_button)
-        self.ui.radioButtonEmotion4.clicked.connect(self.enable_record_button)
-        self.ui.radioButtonEmotion5.clicked.connect(self.enable_record_button)
+        self.ui.confirmButton.clicked.connect(self.confirm_name)
+        self.ui.editButton.clicked.connect(self.edit_name)
+        self.ui.radioButtonEmotion1.clicked.connect(self.select_emotion)
+        self.ui.radioButtonEmotion2.clicked.connect(self.select_emotion)
+        self.ui.radioButtonEmotion3.clicked.connect(self.select_emotion)
+        self.ui.radioButtonEmotion4.clicked.connect(self.select_emotion)
+        self.ui.radioButtonEmotion5.clicked.connect(self.select_emotion)
 
-    def enable_record_button(self):
-        self.ui.recordButton.setEnabled(True)
+    def keyPressEvent(self, QKeyEvent):
+        if QKeyEvent.key() == QtCore.Qt.Key_Space:
+            if self.ui.recordButton.isEnabled():
+                self.ui.recordButton.clicked.emit()
+            elif self.ui.stopButton.isEnabled():
+                self.ui.stopButton.clicked.emit()
+
+    def select_emotion(self):
+        self.emotion_selected = True
+        self._update_button_status()
+    
+    def confirm_name(self):
+        self.name_confirmed = True
+        self._update_button_status()
+
+    def edit_name(self):
+        self.name_confirmed = False
+        self._update_button_status()
 
     def open_file_dialog(self):
         dname = QFileDialog.getExistingDirectory(self, 'Select Directory')
@@ -52,26 +74,58 @@ class RecorderApp(QDialog):
         self.recording_file = Recorder().open(self.file_path, self._get_device_index())
         self.recording_file.start_recording()
         # update objects
+        # update the buttons' status
+        self.is_recording = True
+        self._update_button_status()
+        # clean up any text in promptLabel
         self.ui.promptLabel.setText('')
-        self.ui.recordButton.setEnabled(False)
-        self.ui.stopButton.setEnabled(True)
+        # start counting
         self.timer.start(1000)
 
     def stop_recording(self):
         self.recording_file.stop_recording()
         self.recording_file.close()
         # clean up
+        # update the buttons' status
+        self.is_recording = False
+        self._update_button_status()
+        # reset the timer
         self.timer.stop()
         self._reset_time()
-        self.ui.recordButton.setEnabled(True)
-        self.ui.stopButton.setEnabled(False)
+        # show the path
         self.ui.promptLabel.setText('Saved file to: ' + self.file_path)
+        # reset the file path
         self.file_path = ''
 
     def timer_event(self):
         self.time = self.time.addSecs(1)
         self.ui.timeLabel.setText(self.time.toString('mm:ss'))
     
+    def _update_button_status(self):
+        # Update the buttons of name confirmation
+        if self.name_confirmed:
+            self.ui.editButton.setEnabled(True)
+            self.ui.confirmButton.setEnabled(False)
+            self.ui.nameEdit.setEnabled(False)
+        else:
+            self.ui.editButton.setEnabled(False)
+            self.ui.confirmButton.setEnabled(True)
+            self.ui.nameEdit.setEnabled(True)
+
+        # Users can press record only after confirming the name
+        # and selecting a emotion.
+        if self.emotion_selected and self.name_confirmed:
+            if self.is_recording:
+                self.ui.recordButton.setEnabled(False)
+                self.ui.stopButton.setEnabled(True)
+            else:
+                self.ui.recordButton.setEnabled(True)
+                self.ui.stopButton.setEnabled(False)
+        else:
+            self.ui.recordButton.setEnabled(False)
+            self.ui.stopButton.setEnabled(False)
+
+        
     def _set_device_box(self):
         # format: "idx - device name"
         devices = AudioDevice().list_devices()
