@@ -12,12 +12,26 @@ class RecorderApp(QDialog):
         self.ui = Ui_Dialog()
         self.ui.setupUi(self)
         # variables
-        self.emotion_set = (
-            'Passionate',
-            'Cheerful',
-            'Bittersweet',
-            'Quirky',
-            'Aggressive'
+        self.emotion_set_1 = (
+            'Anger',
+            'Disgust',
+            'Fear',
+            'Happiness',
+            'Sadness',
+            'Surprise'
+        )
+        self.emotion_set_2 = (
+            'Cluster 1',
+            'Cluster 2',
+            'Cluster 3',
+            'Cluster 4',
+            'Cluster 5',
+        )
+        self.emotion_set_3 = (
+            'Quadrant 1',
+            'Quadrant 2',
+            'Quadrant 3',
+            'Quadrant 4',
         )
         self.dataset_path = ''
         self.file_path = ''
@@ -147,15 +161,38 @@ class RecorderApp(QDialog):
 
     def _get_emotion(self):
         if self.ui.radioButtonEmotion1.isChecked():
-            emotion = self.emotion_set[0]
+            emotion = self.emotion_set_1[0]
         elif self.ui.radioButtonEmotion2.isChecked():
-            emotion = self.emotion_set[1]
+            emotion = self.emotion_set_1[1]
         elif self.ui.radioButtonEmotion3.isChecked():
-            emotion = self.emotion_set[2]
+            emotion = self.emotion_set_1[2]
         elif self.ui.radioButtonEmotion4.isChecked():
-            emotion = self.emotion_set[3]
+            emotion = self.emotion_set_1[3]
         elif self.ui.radioButtonEmotion5.isChecked():
-            emotion = self.emotion_set[4]
+            emotion = self.emotion_set_1[4]
+        elif self.ui.radioButtonEmotion6.isChecked():
+            emotion = self.emotion_set_1[5]
+
+        elif self.ui.radioButtonEmotion7.isChecked():
+            emotion = self.emotion_set_2[0]
+        elif self.ui.radioButtonEmotion8.isChecked():
+            emotion = self.emotion_set_2[1]
+        elif self.ui.radioButtonEmotion9.isChecked():
+            emotion = self.emotion_set_2[2]
+        elif self.ui.radioButtonEmotion10.isChecked():
+            emotion = self.emotion_set_2[3]
+        elif self.ui.radioButtonEmotion11.isChecked():
+            emotion = self.emotion_set_2[4]
+
+        elif self.ui.radioButtonEmotion12.isChecked():
+            emotion = self.emotion_set_3[0]
+        elif self.ui.radioButtonEmotion13.isChecked():
+            emotion = self.emotion_set_3[1]
+        elif self.ui.radioButtonEmotion14.isChecked():
+            emotion = self.emotion_set_3[2]
+        elif self.ui.radioButtonEmotion15.isChecked():
+            emotion = self.emotion_set_3[3]
+
         return emotion
 
     def _get_instruemt(self):
