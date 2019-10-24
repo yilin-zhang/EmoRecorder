@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>502</width>
+    <width>476</width>
     <height>713</height>
    </rect>
   </property>
@@ -17,37 +17,37 @@
    <item row="17" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_4">
      <item>
+      <widget class="QRadioButton" name="radioButtonEmotion6">
+       <property name="text">
+        <string>Anger</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QRadioButton" name="radioButtonEmotion7">
        <property name="text">
-        <string>Cluster 1</string>
+        <string>Hate</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QRadioButton" name="radioButtonEmotion8">
        <property name="text">
-        <string>Cluster 2</string>
+        <string>Contempt</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QRadioButton" name="radioButtonEmotion9">
        <property name="text">
-        <string>Cluster 3</string>
+        <string>Disgust</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QRadioButton" name="radioButtonEmotion10">
        <property name="text">
-        <string>Cluster 4</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QRadioButton" name="radioButtonEmotion11">
-       <property name="text">
-        <string>Cluster 5</string>
+        <string>Fear</string>
        </property>
       </widget>
      </item>
@@ -58,42 +58,35 @@
      <item>
       <widget class="QRadioButton" name="radioButtonEmotion1">
        <property name="text">
-        <string>Anger</string>
+        <string>Pleasure</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QRadioButton" name="radioButtonEmotion2">
        <property name="text">
-        <string>Disgust</string>
+        <string>Joy</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QRadioButton" name="radioButtonEmotion3">
        <property name="text">
-        <string>Fear</string>
+        <string>Pride</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QRadioButton" name="radioButtonEmotion4">
        <property name="text">
-        <string>Happiness</string>
+        <string>Amusement</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QRadioButton" name="radioButtonEmotion5">
        <property name="text">
-        <string>Sadness</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QRadioButton" name="radioButtonEmotion6">
-       <property name="text">
-        <string>Surprise</string>
+        <string>Interest</string>
        </property>
       </widget>
      </item>
@@ -102,30 +95,37 @@
    <item row="18" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_5">
      <item>
+      <widget class="QRadioButton" name="radioButtonEmotion11">
+       <property name="text">
+        <string>Disappointment</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QRadioButton" name="radioButtonEmotion12">
        <property name="text">
-        <string>Quadrant 1</string>
+        <string>Shame</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QRadioButton" name="radioButtonEmotion13">
        <property name="text">
-        <string>Quadrant 2</string>
+        <string>Regret</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QRadioButton" name="radioButtonEmotion14">
        <property name="text">
-        <string>Quadrant 3</string>
+        <string>Guilt</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QRadioButton" name="radioButtonEmotion15">
        <property name="text">
-        <string>Quadrant 4</string>
+        <string>Sadness</string>
        </property>
       </widget>
      </item>
@@ -309,6 +309,45 @@
       <bool>true</bool>
      </property>
     </widget>
+   </item>
+   <item row="19" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_6">
+     <item>
+      <widget class="QRadioButton" name="radioButtonEmotion16">
+       <property name="text">
+        <string>Compassion</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="radioButtonEmotion17">
+       <property name="text">
+        <string>Relief</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="radioButtonEmotion18">
+       <property name="text">
+        <string>Admiration</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="radioButtonEmotion19">
+       <property name="text">
+        <string>Love</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="radioButtonEmotion20">
+       <property name="text">
+        <string>Contentment</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
