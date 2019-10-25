@@ -78,11 +78,8 @@ class RecorderApp(QDialog):
         self.timer.timeout.connect(self.timer_event)
         self.ui.confirmButton.clicked.connect(self.confirm_name)
         self.ui.editButton.clicked.connect(self.edit_name)
-        self.ui.radioButtonEmotion1.clicked.connect(self.select_emotion)
-        self.ui.radioButtonEmotion2.clicked.connect(self.select_emotion)
-        self.ui.radioButtonEmotion3.clicked.connect(self.select_emotion)
-        self.ui.radioButtonEmotion4.clicked.connect(self.select_emotion)
-        self.ui.radioButtonEmotion5.clicked.connect(self.select_emotion)
+        for emotion_button in self.emotion_buttons:
+            emotion_button.clicked.connect(self.select_emotion)
         self.ui.instrumentBox.currentIndexChanged.connect(self._update_phrase_numbers)
 
     def keyPressEvent(self, QKeyEvent):
@@ -95,6 +92,7 @@ class RecorderApp(QDialog):
     def select_emotion(self):
         self.emotion_selected = True
         self._update_button_status()
+        self._update_phrase_numbers()
     
     def confirm_name(self):
         self.name_confirmed = True
@@ -104,6 +102,7 @@ class RecorderApp(QDialog):
     def edit_name(self):
         self.name_confirmed = False
         self._update_button_status()
+        self._update_phrase_numbers()
 
     def open_file_dialog(self):
         dname = QFileDialog.getExistingDirectory(self, 'Select Directory')
@@ -127,10 +126,9 @@ class RecorderApp(QDialog):
         self.recording_file.stop_recording()
         self.recording_file.close()
         # clean up
-        # update the buttons' status
+        # update the buttons' status and phrase numbers
         self.is_recording = False
         self._update_button_status()
-        # update phrase number display
         self._update_phrase_numbers()
         # reset the timer
         self.timer.stop()
