@@ -12,34 +12,51 @@ class RecorderApp(QDialog):
         self.ui = Ui_Dialog()
         self.ui.setupUi(self)
         # variables
-        self.emotion_set_1 = (
+        self.emotion_set = (
             'Pleasure',
             'Joy',
             'Pride',
             'Amusement',
             'Interest',
-        )
-        self.emotion_set_2 = (
             'Anger',
             'Hate',
             'Contempt',
             'Disgust',
             'Fear',
-        )
-        self.emotion_set_3 = (
             'Disappointment',
             'Shame',
             'Regret',
             'Guilt',
             'Sadness',
-        )
-        self.emotion_set_4 = (
             'Compassion',
             'Relief',
             'Admiration',
             'Love',
             'Contentment',
         )
+        self.emotion_buttons = (
+            self.ui.radioButtonEmotion1,
+            self.ui.radioButtonEmotion2,
+            self.ui.radioButtonEmotion3,
+            self.ui.radioButtonEmotion4,
+            self.ui.radioButtonEmotion5,
+            self.ui.radioButtonEmotion6,
+            self.ui.radioButtonEmotion7,
+            self.ui.radioButtonEmotion8,
+            self.ui.radioButtonEmotion9,
+            self.ui.radioButtonEmotion10,
+            self.ui.radioButtonEmotion11,
+            self.ui.radioButtonEmotion12,
+            self.ui.radioButtonEmotion13,
+            self.ui.radioButtonEmotion14,
+            self.ui.radioButtonEmotion15,
+            self.ui.radioButtonEmotion16,
+            self.ui.radioButtonEmotion17,
+            self.ui.radioButtonEmotion18,
+            self.ui.radioButtonEmotion19,
+            self.ui.radioButtonEmotion20,
+        )
+        self.emotion_button_dict = dict(zip(self.emotion_set, self.emotion_buttons))
         self.dataset_path = ''
         self.file_path = ''
         self.name_confirmed = False
@@ -52,6 +69,8 @@ class RecorderApp(QDialog):
         self.timer = QtCore.QTimer()
         self._reset_time()
         self._set_device_box()
+        for emotion in self.emotion_set:
+            self.emotion_button_dict[emotion].setText(emotion)
         # messages
         self.ui.recordButton.clicked.connect(self.start_recording)
         self.ui.stopButton.clicked.connect(self.stop_recording)
@@ -64,6 +83,7 @@ class RecorderApp(QDialog):
         self.ui.radioButtonEmotion3.clicked.connect(self.select_emotion)
         self.ui.radioButtonEmotion4.clicked.connect(self.select_emotion)
         self.ui.radioButtonEmotion5.clicked.connect(self.select_emotion)
+        self.ui.instrumentBox.currentIndexChanged.connect(self._update_phrase_numbers)
 
     def keyPressEvent(self, QKeyEvent):
         if QKeyEvent.key() == QtCore.Qt.Key_Space:
@@ -79,6 +99,7 @@ class RecorderApp(QDialog):
     def confirm_name(self):
         self.name_confirmed = True
         self._update_button_status()
+        self._update_phrase_numbers()
 
     def edit_name(self):
         self.name_confirmed = False
@@ -90,8 +111,7 @@ class RecorderApp(QDialog):
         self.ui.dirPath.setText(dname)
 
     def start_recording(self):
-        name = self.ui.nameEdit.text()
-        self.file_path = self._get_save_path(name)
+        self.file_path = self._get_save_path()
         self.recording_file = Recorder().open(self.file_path, self._get_device_index())
         self.recording_file.start_recording()
         # update objects
@@ -110,6 +130,8 @@ class RecorderApp(QDialog):
         # update the buttons' status
         self.is_recording = False
         self._update_button_status()
+        # update phrase number display
+        self._update_phrase_numbers()
         # reset the timer
         self.timer.stop()
         self._reset_time()
@@ -139,9 +161,13 @@ class RecorderApp(QDialog):
             if self.is_recording:
                 self.ui.recordButton.setEnabled(False)
                 self.ui.stopButton.setEnabled(True)
+                for emotionButton in self.emotion_buttons:
+                    emotionButton.setEnabled(False)
             else:
                 self.ui.recordButton.setEnabled(True)
                 self.ui.stopButton.setEnabled(False)
+                for emotionButton in self.emotion_buttons:
+                    emotionButton.setEnabled(True)
         else:
             self.ui.recordButton.setEnabled(False)
             self.ui.stopButton.setEnabled(False)
@@ -167,64 +193,48 @@ class RecorderApp(QDialog):
         self.ui.timeLabel.setText('00:00')
 
     def _get_emotion(self):
-        if self.ui.radioButtonEmotion1.isChecked():
-            emotion = self.emotion_set_1[0]
-        elif self.ui.radioButtonEmotion2.isChecked():
-            emotion = self.emotion_set_1[1]
-        elif self.ui.radioButtonEmotion3.isChecked():
-            emotion = self.emotion_set_1[2]
-        elif self.ui.radioButtonEmotion4.isChecked():
-            emotion = self.emotion_set_1[3]
-        elif self.ui.radioButtonEmotion5.isChecked():
-            emotion = self.emotion_set_1[4]
-
-        elif self.ui.radioButtonEmotion6.isChecked():
-            emotion = self.emotion_set_2[0]
-        elif self.ui.radioButtonEmotion7.isChecked():
-            emotion = self.emotion_set_2[1]
-        elif self.ui.radioButtonEmotion8.isChecked():
-            emotion = self.emotion_set_2[2]
-        elif self.ui.radioButtonEmotion9.isChecked():
-            emotion = self.emotion_set_2[3]
-        elif self.ui.radioButtonEmotion10.isChecked():
-            emotion = self.emotion_set_2[4]
-
-        elif self.ui.radioButtonEmotion11.isChecked():
-            emotion = self.emotion_set_3[0]
-        elif self.ui.radioButtonEmotion12.isChecked():
-            emotion = self.emotion_set_3[1]
-        elif self.ui.radioButtonEmotion13.isChecked():
-            emotion = self.emotion_set_3[2]
-        elif self.ui.radioButtonEmotion14.isChecked():
-            emotion = self.emotion_set_3[3]
-        elif self.ui.radioButtonEmotion15.isChecked():
-            emotion = self.emotion_set_3[4]
-
-        elif self.ui.radioButtonEmotion16.isChecked():
-            emotion = self.emotion_set_4[0]
-        elif self.ui.radioButtonEmotion17.isChecked():
-            emotion = self.emotion_set_4[1]
-        elif self.ui.radioButtonEmotion18.isChecked():
-            emotion = self.emotion_set_4[2]
-        elif self.ui.radioButtonEmotion19.isChecked():
-            emotion = self.emotion_set_4[3]
-        elif self.ui.radioButtonEmotion20.isChecked():
-            emotion = self.emotion_set_4[4]
-
-        return emotion
+        for emotion in self.emotion_set:
+            if self.emotion_button_dict[emotion].isChecked():
+                return emotion
+    
+    def _get_name(self):
+        return self.ui.nameEdit.text()
 
     def _get_instruemt(self):
         return self.ui.instrumentBox.currentText()
 
-    def _get_save_path(self, name):
+    def _get_save_path(self):
         emotion = self._get_emotion()
         instrument = self._get_instruemt()
+        name = self._get_name()
         dir_path = os.path.join(self.dataset_path, emotion, instrument)
         if not os.path.exists(dir_path):
             os.makedirs(dir_path)
         filename = name + '-' + datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S') + '.wav'
         file_path = os.path.join(dir_path, filename)
         return file_path
+    
+    def _update_phrase_numbers(self):
+        phrase_numbers = {emotion: 0 for emotion in self.emotion_set}
+        instrument = self._get_instruemt()
+        # count the phrase numbers of each emotion
+        for emotion in self.emotion_set:
+            dir_path = os.path.join(self.dataset_path, emotion, instrument)
+            # no directory means no phrase of this emotion has been recorded
+            if not os.path.exists(dir_path):
+                continue
+            # count the number of files
+            for filename in os.listdir(dir_path):
+                if re.match('^' + self._get_name(), filename):
+                    phrase_numbers[emotion] += 1
+        # update the number display
+        for emotion in self.emotion_set:
+            # display the number when it's bigger than 0
+            if phrase_numbers[emotion] > 0:
+                self.emotion_button_dict[emotion].setText(
+                    emotion + '(' + str(phrase_numbers[emotion]) + ')')
+            else:
+                self.emotion_button_dict[emotion].setText(emotion)
 
 
 if __name__ == '__main__':
