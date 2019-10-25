@@ -108,6 +108,8 @@ class RecorderApp(QDialog):
         dname = QFileDialog.getExistingDirectory(self, 'Select Directory')
         self.dataset_path = dname
         self.ui.dirPath.setText(dname)
+        self._update_button_status()
+        self._update_phrase_numbers()
 
     def start_recording(self):
         self.file_path = self._get_save_path()
@@ -155,7 +157,7 @@ class RecorderApp(QDialog):
 
         # Users can press record only after confirming the name
         # and selecting a emotion.
-        if self.emotion_selected and self.name_confirmed:
+        if self.emotion_selected and self.name_confirmed and self.dataset_path != '':
             if self.is_recording:
                 self.ui.recordButton.setEnabled(False)
                 self.ui.stopButton.setEnabled(True)
