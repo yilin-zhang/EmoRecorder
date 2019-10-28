@@ -21,15 +21,18 @@ class MidiDevice():
         return mido.get_input_names()
 
 class MidiPedal(MidiDevice):
-    def __init__(self, button_note=60):
+    def __init__(self, start_note, end_note):
         super().__init__()
-        self.button_note = button_note
+        self.start_note = start_note
+        self.end_note = end_note
     
-    def open_device(self, device_name, callback):
+    def open_device(self, device_name, callback_start, callback_end):
         def inner_callback(msg):
             on_off, note, _ = msg.bytes()
             # uncomment the next line for testing
-            # print(note)
-            if note == self.button_note and on_off == MidiDevice.NOTE_OFF:
-                callback()
+            print(note)
+            if note == self.start_note and on_off == MidiDevice.NOTE_OFF:
+                callback_start()
+            elif note == self.end_note and on_off == MidiDevice.NOTE_ON:
+                callback_end()
         super().open_device(device_name, inner_callback)

@@ -5,7 +5,7 @@ from app_ui import *
 
 from recorder import Recorder
 from audio_device import AudioDevice
-from midi_device import MidiPedal 
+from midi_device import MidiDevice, MidiPedal 
 
 class RecorderApp(QDialog):
     def __init__(self):
@@ -195,20 +195,22 @@ class RecorderApp(QDialog):
         return int(re.match('\d+', self.ui.audioDeviceBox.currentText()).group())
 
     def _set_midi_device_box(self):
-        devices = MidiPedal().list_devices()
+        devices = MidiDevice().list_devices()
         self.ui.midiDeviceBox.addItems(devices)
 
     def _open_midi_device(self):
-        def callback():
+        def callback_start():
             if self.ready_to_record:
                 if self.ui.recordButton.isEnabled():
                     self.ui.recordButton.clicked.emit()
-                elif self.ui.stopButton.isEnabled():
+        def callback_end():
+            if self.ready_to_record:
+                if self.ui.stopButton.isEnabled():
                     self.ui.stopButton.clicked.emit()
         device_name = self.ui.midiDeviceBox.currentText()
         if device_name != '':
-            midi_pedal = MidiPedal(button_note=51)
-            midi_pedal.open_device(device_name, callback)
+            midi_pedal = MidiPedal(start_note=48, end_note=60)
+            midi_pedal.open_device(device_name, callback_start, callback_end)
 
     def _reset_time(self):
         self.time = QtCore.QTime(0, 0, 0)
