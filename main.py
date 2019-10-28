@@ -206,8 +206,9 @@ class RecorderApp(QDialog):
                 elif self.ui.stopButton.isEnabled():
                     self.ui.stopButton.clicked.emit()
         device_name = self.ui.midiDeviceBox.currentText()
-        midi_pedal = MidiPedal(button_note=51)
-        midi_pedal.open_device(device_name, callback)
+        if device_name != '':
+            midi_pedal = MidiPedal(button_note=51)
+            midi_pedal.open_device(device_name, callback)
 
     def _reset_time(self):
         self.time = QtCore.QTime(0, 0, 0)

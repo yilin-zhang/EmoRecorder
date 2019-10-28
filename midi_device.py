@@ -29,7 +29,7 @@ class MidiPedal(MidiDevice):
         def inner_callback(msg):
             on_off, note, _ = msg.bytes()
             # uncomment the next line for testing
-            print(note)
+            # print(note)
             if note == self.button_note and on_off == MidiDevice.NOTE_OFF:
                 callback()
         super().open_device(device_name, inner_callback)
