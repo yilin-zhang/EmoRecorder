@@ -96,24 +96,24 @@ class RecorderApp(QDialog):
 
     def select_emotion(self):
         self.emotion_selected = True
-        self._update_button_status()
+        self._update_status()
         self._update_phrase_numbers()
     
     def confirm_name(self):
         self.name_confirmed = True
-        self._update_button_status()
+        self._update_status()
         self._update_phrase_numbers()
 
     def edit_name(self):
         self.name_confirmed = False
-        self._update_button_status()
+        self._update_status()
         self._update_phrase_numbers()
 
     def open_file_dialog(self):
         dname = QFileDialog.getExistingDirectory(self, 'Select Directory')
         self.dataset_path = dname
         self.ui.dirPath.setText(dname)
-        self._update_button_status()
+        self._update_status()
         self._update_phrase_numbers()
 
     def start_recording(self):
@@ -123,7 +123,7 @@ class RecorderApp(QDialog):
         # update objects
         # update the buttons' status
         self.is_recording = True
-        self._update_button_status()
+        self._update_status()
         # clean up any text in promptLabel
         self.ui.promptLabel.setText('')
         # start counting
@@ -135,7 +135,7 @@ class RecorderApp(QDialog):
         # clean up
         # update the buttons' status and phrase numbers
         self.is_recording = False
-        self._update_button_status()
+        self._update_status()
         self._update_phrase_numbers()
         # reset the timer
         self.timer.stop()
@@ -149,7 +149,7 @@ class RecorderApp(QDialog):
         self.time = self.time.addSecs(1)
         self.ui.timeLabel.setText(self.time.toString('mm:ss'))
     
-    def _update_button_status(self):
+    def _update_status(self):
         # Update the buttons of name confirmation
         if self.name_confirmed:
             self.ui.editButton.setEnabled(True)
