@@ -83,7 +83,7 @@ class RecordingFile(object):
         def callback(in_data, frame_count, time_info, status):
             self.wavefile.writeframes(in_data)
             # visualization
-            self._visualize(in_data)
+            # self._visualize(in_data)
             return in_data, pyaudio.paContinue
         return callback
 

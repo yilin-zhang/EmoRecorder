@@ -5,6 +5,7 @@ from app_ui import *
 
 from recorder import Recorder
 from audio_device import AudioDevice
+from midi_device import MidiPedal 
 
 class RecorderApp(QDialog):
     def __init__(self):
@@ -62,13 +63,16 @@ class RecorderApp(QDialog):
         self.name_confirmed = False
         self.emotion_selected = False
         self.is_recording = False
+        self.ready_to_record = False
         # other settings
         self.ui.stopButton.setEnabled(False)
         self.ui.recordButton.setEnabled(False)
         self.ui.editButton.setEnabled(False)
         self.timer = QtCore.QTimer()
         self._reset_time()
-        self._set_device_box()
+        self._set_audio_device_box()
+        self._set_midi_device_box()
+        self._open_midi_device()
         for emotion in self.emotion_set:
             self.emotion_button_dict[emotion].setText(emotion)
         # messages
@@ -81,9 +85,10 @@ class RecorderApp(QDialog):
         for emotion_button in self.emotion_buttons:
             emotion_button.clicked.connect(self.select_emotion)
         self.ui.instrumentBox.currentIndexChanged.connect(self._update_phrase_numbers)
+        self.ui.midiDeviceBox.currentIndexChanged.connect(self._open_midi_device)
 
     def keyPressEvent(self, QKeyEvent):
-        if QKeyEvent.key() == QtCore.Qt.Key_Space:
+        if QKeyEvent.key() == QtCore.Qt.Key_Space and self.ready_to_record:
             if self.ui.recordButton.isEnabled():
                 self.ui.recordButton.clicked.emit()
             elif self.ui.stopButton.isEnabled():
@@ -113,7 +118,7 @@ class RecorderApp(QDialog):
 
     def start_recording(self):
         self.file_path = self._get_save_path()
-        self.recording_file = Recorder().open(self.file_path, self._get_device_index())
+        self.recording_file = Recorder().open(self.file_path, self._get_audio_device_index())
         self.recording_file.start_recording()
         # update objects
         # update the buttons' status
@@ -157,7 +162,8 @@ class RecorderApp(QDialog):
 
         # Users can press record only after confirming the name
         # and selecting a emotion.
-        if self.emotion_selected and self.name_confirmed and self.dataset_path != '':
+        self.ready_to_record = self.emotion_selected and self.name_confirmed and self.dataset_path != ''
+        if self.ready_to_record:
             if self.is_recording:
                 self.ui.recordButton.setEnabled(False)
                 self.ui.stopButton.setEnabled(True)
@@ -173,7 +179,7 @@ class RecorderApp(QDialog):
             self.ui.stopButton.setEnabled(False)
 
         
-    def _set_device_box(self):
+    def _set_audio_device_box(self):
         # format: "idx - device name"
         devices = AudioDevice().list_devices()
         items = []
@@ -182,11 +188,26 @@ class RecorderApp(QDialog):
             name = device['name']
             item = str(index) + ' - ' + name
             items.append(item)
-        self.ui.deviceBox.addItems(items)
+        self.ui.audioDeviceBox.addItems(items)
     
-    def _get_device_index(self):
+    def _get_audio_device_index(self):
         # return the number at the beginning as the index
-        return int(re.match('\d+', self.ui.deviceBox.currentText()).group())
+        return int(re.match('\d+', self.ui.audioDeviceBox.currentText()).group())
+
+    def _set_midi_device_box(self):
+        devices = MidiPedal().list_devices()
+        self.ui.midiDeviceBox.addItems(devices)
+
+    def _open_midi_device(self):
+        def callback():
+            if self.ready_to_record:
+                if self.ui.recordButton.isEnabled():
+                    self.ui.recordButton.clicked.emit()
+                elif self.ui.stopButton.isEnabled():
+                    self.ui.stopButton.clicked.emit()
+        device_name = self.ui.midiDeviceBox.currentText()
+        midi_pedal = MidiPedal(button_note=51)
+        midi_pedal.open_device(device_name, callback)
 
     def _reset_time(self):
         self.time = QtCore.QTime(0, 0, 0)
