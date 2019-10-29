@@ -43,6 +43,7 @@ class RecordingFile(object):
         self.wavefile = self._prepare_file(self.fname, self.mode)
         self._stream = None
         self.input_device_index = input_device_index
+        self._playback_stream = None
 
     def __enter__(self):
         return self
@@ -73,20 +74,29 @@ class RecordingFile(object):
                                         frames_per_buffer=self.frames_per_buffer,
                                         stream_callback=self.get_callback())
         self._stream.start_stream()
+
+        self._playback_stream = self._pa.open(format=pyaudio.paInt16,
+                                        channels=self.channels,
+                                        rate=self.rate,
+                                        output=True,
+                                        frames_per_buffer=self.frames_per_buffer)
+        self._playback_stream.start_stream()
         return self
 
     def stop_recording(self):
         self._stream.stop_stream()
+        self._playback_stream.stop_stream()
         return self
     
     def get_callback(self):
         def callback(in_data, frame_count, time_info, status):
             self.wavefile.writeframes(in_data)
             # visualization
-            # self._visualize(in_data)
+            self._visualize(in_data)
+            # playback
+            self._playback_stream.write(in_data)
             return in_data, pyaudio.paContinue
         return callback
-
 
     def close(self):
         self._stream.close()
@@ -102,7 +112,12 @@ class RecordingFile(object):
 
     def _visualize(self, in_data):
         data = np.fromstring(in_data, dtype=np.int16)
-        peak = np.average(np.abs(data)) * 2
-        num = int(50*math.log2(peak)/math.log2(2**16))
-        bars = '#' * num
+        peak = np.max(np.abs(data)) * 2
+        num = round(20 * math.log10(peak / 2**16))
+        if num < -50:
+            bars = ''
+        elif num >= -18:
+            bars = '#' * (50 - 18) + '*' * (18 + num)
+        else:
+            bars = '#' * (50 + num)
         print("%02d %s" % (num, bars))
