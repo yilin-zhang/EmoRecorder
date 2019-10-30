@@ -107,6 +107,7 @@ class RecordingFile(object):
         peak = np.max(np.abs(data)) * 2
         e = 0.0001
         num = round(20 * math.log10((peak+e) / 2**16))
+
         if num < -50:
             bars = '[' + '-' * 50 + ']'
         elif num >= -18 and num < -5:
@@ -115,4 +116,10 @@ class RecordingFile(object):
             bars = '[' + colored(' ' * (50 - 18), on_color='on_green') + colored(' ' * (18 - 5), on_color='on_yellow') + colored(' ' * (5+num), on_color='on_red') + '-' * abs(num) + ']'
         else:
             bars = '[' + colored(' ' * (50 + num), on_color='on_green') + '-' * abs(num) + ']'
-        print("%s %02d" % (bars, num))
+        
+        if num < -150:
+            num_str = '-∞'
+        else:
+            num_str = str(num)
+
+        print("%s %s" % (bars, num_str))
