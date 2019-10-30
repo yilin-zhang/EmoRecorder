@@ -44,7 +44,6 @@ class RecordingFile(object):
         self.wavefile = self._prepare_file(self.fname, self.mode)
         self._stream = None
         self.input_device_index = input_device_index
-        self._playback_stream = None
 
     def __enter__(self):
         return self
@@ -71,22 +70,16 @@ class RecordingFile(object):
                                         channels=self.channels,
                                         rate=self.rate,
                                         input=True,
+                                        output=True,
                                         input_device_index = self.input_device_index,
                                         frames_per_buffer=self.frames_per_buffer,
                                         stream_callback=self.get_callback())
         self._stream.start_stream()
 
-        self._playback_stream = self._pa.open(format=pyaudio.paInt16,
-                                        channels=self.channels,
-                                        rate=self.rate,
-                                        output=True,
-                                        frames_per_buffer=self.frames_per_buffer)
-        self._playback_stream.start_stream()
         return self
 
     def stop_recording(self):
         self._stream.stop_stream()
-        self._playback_stream.stop_stream()
         return self
     
     def get_callback(self):
@@ -94,8 +87,6 @@ class RecordingFile(object):
             self.wavefile.writeframes(in_data)
             # visualization
             self._visualize(in_data)
-            # playback
-            self._playback_stream.write(in_data)
             return in_data, pyaudio.paContinue
         return callback
 
@@ -114,7 +105,8 @@ class RecordingFile(object):
     def _visualize(self, in_data):
         data = np.fromstring(in_data, dtype=np.int16)
         peak = np.max(np.abs(data)) * 2
-        num = round(20 * math.log10(peak / 2**16))
+        e = 0.0001
+        num = round(20 * math.log10((peak+e) / 2**16))
         if num < -50:
             bars = '[' + '-' * 50 + ']'
         elif num >= -18 and num < -5:

@@ -118,7 +118,12 @@ class RecorderApp(QDialog):
 
     def start_recording(self):
         self.file_path = self._get_save_path()
-        self.recording_file = Recorder().open(self.file_path, self._get_audio_device_index())
+        # initialize stream
+        audio_device_index = self._get_audio_device_index()
+        for device in AudioDevice().list_devices():
+            if device['index'] == audio_device_index:
+                channels = device['channels']
+        self.recording_file = Recorder(channels=channels).open(self.file_path, audio_device_index)
         self.recording_file.start_recording()
         # update objects
         # update the buttons' status
