@@ -16,6 +16,7 @@ import pyaudio
 import wave
 import numpy as np
 import math
+from termcolor import colored, cprint
 
 class Recorder(object):
     '''A recorder class for recording audio to a WAV file.
@@ -115,9 +116,11 @@ class RecordingFile(object):
         peak = np.max(np.abs(data)) * 2
         num = round(20 * math.log10(peak / 2**16))
         if num < -50:
-            bars = ''
-        elif num >= -18:
-            bars = '#' * (50 - 18) + '*' * (18 + num)
+            bars = '[' + '-' * 50 + ']'
+        elif num >= -18 and num < -5:
+            bars = '[' + colored(' ' * (50 - 18), on_color='on_green') + colored(' ' * (18 + num), on_color='on_yellow') + '-' * abs(num) + ']'
+        elif num >= -5:
+            bars = '[' + colored(' ' * (50 - 18), on_color='on_green') + colored(' ' * (18 - 5), on_color='on_yellow') + colored(' ' * (5+num), on_color='on_red') + '-' * abs(num) + ']'
         else:
-            bars = '#' * (50 + num)
-        print("%02d %s" % (num, bars))
+            bars = '[' + colored(' ' * (50 + num), on_color='on_green') + '-' * abs(num) + ']'
+        print("%s %02d" % (bars, num))
