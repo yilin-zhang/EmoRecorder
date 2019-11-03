@@ -123,7 +123,11 @@ class RecorderApp(QDialog):
         for device in AudioDevice().list_devices():
             if device['index'] == audio_device_index:
                 channels = device['channels']
-        self.recording_file = Recorder(channels=channels).open(self.file_path, audio_device_index)
+        # TODO: Now I set `channels=1` to make the audio file to be mono.
+        # It's only for the current audio interface. It's supposed to be
+        # variable `channels`. Also it can be improved by specifying a certain
+        # channel of input device, and always making the audio file mono.
+        self.recording_file = Recorder(channels=1).open(self.file_path, audio_device_index)
         self.recording_file.start_recording()
         # update objects
         # update the buttons' status
